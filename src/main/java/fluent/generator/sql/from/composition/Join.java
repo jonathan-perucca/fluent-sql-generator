@@ -1,9 +1,7 @@
 package fluent.generator.sql.from.composition;
 
-import fluent.generator.sql.from.From;
-
 /**
  */
-public interface Join extends From {
+public interface Join {
     On on(String element);
 }

@@ -16,10 +16,10 @@ public class GeneratorSqlTest {
 
     private final String selectOne = "select 1;";
     private final String selectUsers = "select * from User;";
-    private final String selectUsersUsingJoins = "select user.* from User user join UserSettings userSettings join UserConfig userConfig;";
+    private final String selectUsersUsingJoins = "select user.* from User user join UserSettings userSettings on userSettings.userSettingsId = user.userSettingsId join UserConfig userConfig on userConfig.userConfigId = user.userConfigId;";
     private final String selectUsersUsingJoinsOn = "select user.* from User user join UserConfig userConfig on userConfig.userConfigId = user.userConfigId join UserSettings userSettings on userSettings.userSettingsId = user.userSettingsId;";
-    private final String selectUsersWhereMonitorEquals = "select user.* from User user join UserSettings userSettings where userSettings.monitor = 'John';";
-    private final String selectUsersWhereMonitorEqualsAndEnableprefNotnull = "select user.* from User user join UserSettings userSettings where userSettings.monitor = 'John' and userSettings.enablePref is not null;";
+    private final String selectUsersWhereMonitorEquals = "select user.* from User user join UserSettings userSettings on userSettings.userSettingsId = user.userSettingsId where userSettings.monitor = 'John';";
+    private final String selectUsersWhereMonitorEqualsAndEnableprefNotnull = "select user.* from User user join UserSettings userSettings on userSettings.userSettingsId = user.userSettingsId where userSettings.monitor = 'John' and userSettings.enablePref is not null;";
     private final String selectUsersWhereFirstnameEqualsOrLastnameEquals = "select user.* from User user where user.firstname = 'John' or user.lastname = 'Smith';";
 
     @Autowired
@@ -36,20 +36,20 @@ public class GeneratorSqlTest {
 
         sql.select("user.*")
            .from("User user")
-                .join("UserSettings userSettings")
-                .join("UserConfig userConfig")
+                .join("UserSettings userSettings").on("userSettings.userSettingsId = user.userSettingsId")
+                .join("UserConfig userConfig").on("userConfig.userConfigId = user.userConfigId")
            .build();
 
         sql.select("user.*")
            .from("User user")
-                .join("UserSettings userSettings")
+                .join("UserSettings userSettings").on("userSettings.userSettingsId = user.userSettingsId")
            .where()
                 .element("userSettings.monitor").isEqualTo("John")
            .build();
 
         sql.select("user.*")
            .from("User user")
-                .join("UserSettings userSettings")
+                .join("UserSettings userSettings").on("userSettings.userSettingsId = user.userSettingsId")
            .where()
                 .element("userSettings.monitor").isEqualTo("John")
                     .and()
@@ -89,8 +89,8 @@ public class GeneratorSqlTest {
     public void selectUsersUsingJoins() {
         String query = sql.select("user.*")
                           .from("User user")
-                              .join("UserSettings userSettings")
-                              .join("UserConfig userConfig")
+                              .join("UserSettings userSettings").on("userSettings.userSettingsId = user.userSettingsId")
+                              .join("UserConfig userConfig").on("userConfig.userConfigId = user.userConfigId")
                           .build();
 
         assertThat(query, is(selectUsersUsingJoins));
@@ -111,7 +111,7 @@ public class GeneratorSqlTest {
     public void selectUsersWhereMonitorEquals() {
         String query = sql.select("user.*")
                           .from("User user")
-                              .join("UserSettings userSettings")
+                              .join("UserSettings userSettings").on("userSettings.userSettingsId = user.userSettingsId")
                           .where()
                               .element("userSettings.monitor").isEqualTo("John")
                           .build();
@@ -123,7 +123,7 @@ public class GeneratorSqlTest {
     public void selectUsersWhereMonitorEqualsAndEnableprefNotnull() {
         String query = sql.select("user.*")
                           .from("User user")
-                              .join("UserSettings userSettings")
+                              .join("UserSettings userSettings").on("userSettings.userSettingsId = user.userSettingsId")
                           .where()
                               .element("userSettings.monitor").isEqualTo("John")
                                   .and()

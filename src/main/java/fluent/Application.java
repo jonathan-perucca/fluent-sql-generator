@@ -20,7 +20,7 @@ public class Application {
         String query = SqlGenerator.sql() // static constructor for generator
                                 .select("user.*")
                                 .from("User user")
-                                    .join("UserSettings userSettings")
+                                    .join("UserSettings userSettings").on("userSettings.userSettingsId = user.userSettingsId")
                                 .where()
                                     .element("userSettings.monitor").isEqualTo("John")
                                     .and()

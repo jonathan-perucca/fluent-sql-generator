@@ -23,19 +23,4 @@ public class JoinImpl implements Join {
     public On on(String element) {
         return new OnImpl(query, element);
     }
-
-    @Override
-    public Join join(String table) {
-        return new JoinImpl(query, table);
-    }
-
-    @Override
-    public Where where() {
-        return new WhereImpl(query);
-    }
-
-    @Override
-    public String build() {
-        return new BuilderImpl(query).build();
-    }
 }
