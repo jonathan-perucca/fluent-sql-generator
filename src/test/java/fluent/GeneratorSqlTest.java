@@ -17,6 +17,7 @@ public class GeneratorSqlTest {
     private final String selectOne = "select 1;";
     private final String selectUsers = "select * from User;";
     private final String selectUsersUsingJoins = "select user.* from User user join UserSettings userSettings join UserConfig userConfig;";
+    private final String selectUsersUsingJoinsOn = "select user.* from User user join UserConfig userConfig on userConfig.userConfigId = user.userConfigId join UserSettings userSettings on userSettings.userSettingsId = user.userSettingsId;";
     private final String selectUsersWhereMonitorEquals = "select user.* from User user join UserSettings userSettings where userSettings.monitor = 'John';";
     private final String selectUsersWhereMonitorEqualsAndEnableprefNotnull = "select user.* from User user join UserSettings userSettings where userSettings.monitor = 'John' and userSettings.enablePref is not null;";
     private final String selectUsersWhereFirstnameEqualsOrLastnameEquals = "select user.* from User user where user.firstname = 'John' or user.lastname = 'Smith';";
@@ -93,6 +94,17 @@ public class GeneratorSqlTest {
                           .build();
 
         assertThat(query, is(selectUsersUsingJoins));
+    }
+
+    @Test
+    public void selectUsersUsingJoinsOn() {
+        String query = sql.select("user.*")
+           .from("User user")
+                .join("UserConfig userConfig").on("userConfig.userConfigId = user.userConfigId")
+                .join("UserSettings userSettings").on("userSettings.userSettingsId = user.userSettingsId")
+           .build();
+
+        assertThat(query, is(selectUsersUsingJoinsOn));
     }
 
     @Test
